@@ -247,4 +247,4 @@ final_chart = (
     .configure_view(strokeWidth=0)
 )
 
-final_chart.save('tsne_original.html')
+final_chart.save('index.html')
