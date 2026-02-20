@@ -72,6 +72,20 @@ search_param = alt.param(value='', bind=alt.binding(input='text', placeholder='K
 legend_selection = alt.selection_point(fields=['cluster_label'], bind='legend')
 click_selection = alt.selection_point(fields=['abstracttitle'], on='click', toggle=True, empty='all')
 
+
+# 1. Keep ONLY the columns used in the chart/sidebar to save space
+essential_cols = [
+    'tsne_x', 'tsne_y', 'cluster_label', 'abstracttitle', 
+    'sessiontitle', 'sessiontype', 'growth_val', 'year', 'abstract'
+]
+df_final = df_final[essential_cols].copy()
+
+# 2. Shorten long floats (t-SNE coordinates don't need 15 decimal places)
+df_final['tsne_x'] = df_final['tsne_x'].round(4)
+df_final['tsne_y'] = df_final['tsne_y'].round(4)
+
+# 3. Clean up the abstract text (remove extra newlines/whitespace that add bulk)
+df_final['abstract'] = df_final['abstract'].str.replace(r'\s+', ' ', regex=True).str.strip()
 final_chart = (
     alt.Chart(df_final)
     .mark_circle(size=25)
